@@ -1,0 +1,47 @@
+use crop_production_in_india;
+
+-- Perform Basic Queries
+
+-- Select All Data from Each Table
+SELECT * FROM agriculture_value_added;
+SELECT * FROM fertilizer_consumption_india;
+SELECT * FROM food_production_index_india;
+
+-- Find the Average Value Added Per Worker
+SELECT AVG(Value_Added_Per_Worker) AS AvgValueAddedPerWorker FROM agriculture_value_added;
+
+-- Find the Year with the Highest Fertilizer Consumption
+SELECT Years, MAX(Fertilizer_Consumption) AS MaxFertilizerConsumption FROM fertilizer_consumption_india GROUP BY Years LIMIT 1;
+
+-- Find the Year with the Lowest Food Production Index
+SELECT Years, MIN(Food_Production_Index) AS MinFoodProductionIndex FROM food_production_index_india GROUP BY Years  
+LIMIT 1;
+
+
+-- Analyze Trends
+
+-- Agriculture Value Added Per Worker Over Time
+SELECT Years, Value_Added_Per_Worker FROM agriculture_value_added ORDER BY Years;
+
+-- Fertilizer Consumption Over Time
+SELECT Years, Fertilizer_Consumption FROM fertilizer_consumption_india ORDER BY Years;
+
+ -- Food Production Index Over Time
+SELECT Years, food_production_index FROM food_production_index_india ORDER BY Years;
+
+SHOW VARIABLES LIKE 'secure_file_priv';
+
+SELECT 
+    a.Years, 
+    a.Value_Added_Per_Worker, 
+    f.Fertilizer_Consumption, 
+    p.Food_Production_Index
+INTO OUTFILE 'C:/Crop Production in India/New folder/Book1.csv'
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+FROM 
+    agriculture_value_added a
+JOIN 
+    fertilizer_consumption_india f ON a.Years = f.Years
+JOIN 
+    food_production_index_india p ON a.Years = p.Years;
